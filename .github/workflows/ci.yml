@@ -26,18 +26,18 @@ jobs:
             docker rm my-cv-container
           fi
 
-      # Step 4: Run new container
+      # Step 4: Run new container on port 8083
       - name: Run container
         run: docker run -d -p 8083:80 --name my-cv-container my-cv:latest
 
       # Step 5: Test deployment
       - name: Test if CV is served
         run: |
-          sleep 5
-           if curl -s http://localhost:8083 | grep -q "CV"; then
-             echo "Test Passed: CV is served correctly"
-           else
-             echo "Test Failed: CV not found"
-          exit 1
-         fi
-
+          # Wait a few seconds for Nginx to start
+          sleep 10
+          if curl -s http://localhost:8083 | grep -q "CV"; then
+            echo "Test Passed: CV is served correctly"
+          else
+            echo "Test Failed: CV not found"
+            exit 1
+          fi
